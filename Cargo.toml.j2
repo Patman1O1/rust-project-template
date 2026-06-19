@@ -1,7 +1,15 @@
 [package]
-name = "{{name}}"
+name = "{{ project.name }}"
 version = "0.1.0"
 edition = "2024"
 
+{% if project.type == "Executable" -%}
+[[bin]]
+name = "main"
+path = "src/main.rs"
+{%- elif project.type == "Library" -%}
 [lib]
-crate-type = ["cdylib", "staticlib"]
+crate-type = ["rlib", "dylib"]
+{%- endif %}
+
+[dependencies]
