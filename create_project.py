@@ -51,8 +51,10 @@ class Project(object):
             src_file.write(src_template.render(project=self))
 
         # Rename "src/{{ project.name }}.rs.j2" to "src/<project_name>.rs" where <project_name> is the .name property
-        os.rename("src/{{ project.name }}.rs.j2", f"src/{self.name}.rs")
-
+        if self.type == "Executable":
+            os.rename("src/{{ project.name }}.rs.j2", "src/main.rs")
+        else:
+            os.rename("src/{{ project.name }}.rs.j2", f"src/{self.name}.rs")
 
 def main() -> int:
     try:
