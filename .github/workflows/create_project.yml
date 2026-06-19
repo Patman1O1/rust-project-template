@@ -31,7 +31,7 @@ jobs:
 
       - name: Run create_project.py
         run: |
-          python3 "${GITHUB_WORKSPACE}/create_project.py" "${{ github.event.repository.name" }}" "${{ github.event.inputs.project_type }}"
+          python3 "${GITHUB_WORKSPACE}/create_project.py" "${{ github.event.repository.name }}" "${{ github.event.inputs.project_type }}"
 
       - name: Update README.md
         run: |
