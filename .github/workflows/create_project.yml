@@ -37,9 +37,10 @@ jobs:
         run: |
           echo -e "# ${{ github.event.repository.name }}\n${{ github.event.repository.description }}" > "$GITHUB_WORKSPACE/README.md"
 
-      - name: Remove .github directory
+      - name: Clean up
         run: |
           rm -rf "${GITHUB_WORKSPACE}/.github"
+          rm -rf "${GITHUB_WORKSPACE}/create_project.py"
 
       - name: Commit changes
         run: |
