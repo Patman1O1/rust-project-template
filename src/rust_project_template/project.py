@@ -120,8 +120,7 @@ class Project(object):
 
         # Remove Python related files and directories
         os.unlink(Project.ROOT/'pyproject.toml')
-        os.unlink(Project.ROOT/'src'/'__main__.py')
-        shutil.rmtree(Project.ROOT/'src'/'project')
+        shutil.rmtree(Project.ROOT/'src'/'rust_project_template')
         shutil.rmtree(Project.ROOT/'src'/'rust_project_template.egg-info')
 
         # Remove Rust related files
