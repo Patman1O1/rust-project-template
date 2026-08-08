@@ -19,18 +19,12 @@ def main(project_name: str,
          project_author: str,
          project_description: str) -> int: # raises SystemExit
     try:
-        # Create a new instance of ProjectType
-        project_type: ProjectType
-        if project_type == 'Executable':
-            project_type = ProjectType.EXECUTABLE
-        elif project_type == 'Library':
-            project_type = ProjectType.LIBRARY
-
         # Create a new instance of Project
-        project: Project = Project(project_name,
-                                   project_type,
-                                   project_author,
-                                   project_description)
+        project: Project = Project(
+            project_name,
+            ProjectType.EXECUTABLE if project_type == 'Executable' else ProjectType.LIBRARY,
+            project_author,
+            project_description)
 
         # Render the project
         project.render()
