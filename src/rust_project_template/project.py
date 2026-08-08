@@ -1,5 +1,6 @@
 # Builtin Imports
 import os
+from enum import Enum
 from pathlib import Path
 from typing import Final
 import shutil
@@ -8,11 +9,16 @@ import shutil
 from jinja2 import Environment, FileSystemLoader
 
 # Local Imports
-from project.edition import Edition, LATEST_EDITION
-from project.format import to_screaming_case, to_pascal_case
-from project.project_type import ProjectType
+from rust_project_template.edition import Edition, LATEST_EDITION
+from rust_project_template.format import to_screaming_case, to_pascal_case
 
 class Project(object):
+    class Type(Enum):
+        EXECUTABLE = 'Executable'
+        LIBRARY = 'Library'
+
+        def __str__(self) -> str: return self.value
+
     ROOT: Final[Path] = Path(__file__).resolve().parents[2]
 
     @staticmethod
@@ -31,12 +37,12 @@ class Project(object):
 
     def __init__(self,
                  name: str,
-                 project_type: ProjectType,
+                 project_type: Project.Type,
                  author: str,
                  description: str='',
                  edition: Edition=LATEST_EDITION) -> None: # raises TypeError
         self.name: str = name
-        self.type: ProjectType = project_type
+        self.type: Project.Type = project_type
         self.author: str = author
         self.edition: Edition = edition
         self.description: str = description
@@ -46,7 +52,7 @@ class Project(object):
     def name(self) -> str: return self._name
 
     @property
-    def type(self) -> ProjectType: return self._type
+    def type(self) -> Project.Type: return self._type
 
     @property
     def author(self) -> str: return self._author
@@ -63,11 +69,11 @@ class Project(object):
         return
 
     @type.setter
-    def type(self, value: ProjectType) -> None: # raises TypeError
-        if not isinstance(value, ProjectType):
-            raise TypeError(f'Expected \'value\' to be of type {ProjectType.__name__}' +
+    def type(self, value: Project.Type) -> None: # raises TypeError
+        if not isinstance(value, Project.Type):
+            raise TypeError(f'Expected \'value\' to be of type {Project.Type.__name__}' +
                             f', got {type(value).__name__}')
-        self._type: ProjectType = value
+        self._type: Project.Type = value
         return
 
     @author.setter
@@ -119,8 +125,8 @@ class Project(object):
         shutil.rmtree(Project.ROOT/'src'/'rust_project_template.egg-info')
 
         # Remove Rust related files
-        if self.type == ProjectType.EXECUTABLE:
+        if self.type == Project.Type.EXECUTABLE:
             os.unlink(Project.ROOT/'src'/'lib.rs')
-        elif self.type == ProjectType.LIBRARY:
+        elif self.type == Project.Type.LIBRARY:
             os.unlink(Project.ROOT/'src'/'main.rs')
         return
