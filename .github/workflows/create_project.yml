@@ -3,8 +3,9 @@ name: "Create Project"
 on:
   workflow_dispatch:
     inputs:
-      project_type:
-        description: "Project type"
+      type:
+        description: "The type of project that will be rendered.
+                      Valid options are Executable and Library"
         required: true
         type: choice
         options:
