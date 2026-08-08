@@ -1,17 +1,12 @@
-# C/C++ Project Template
+# Rust Project Template
 
 ## Overview
-A template repository for C/C++ projects with CMake and Conan. A GitHub Action 
-workflow is provided with the on `workflow_dispatch` event. This event has three input
-parameters which are `project_lang`, `project_type`, and `project_namespace`.
-`project_lang` is the language the project will be generated in. As the name of this
-template repo might suggest, the only available options are C and C++. For
-`project_type`, one can choose from Executable, Static Library, Shared Library, or
-Interface Library. The last  parameter, `project_namespace`, is optional and defaults 
-to the name of the GitHub repository name. 
+A template repository for Rust projects with Clippy and Bacon. A GitHub Action 
+workflow is provided with the on `workflow_dispatch` event. This event has one type which is
+`type`. `type` is the type of project will be generated. More information can be found below.
 
-## Template Parameters: `project_type`
-`project_type` determines how the project will be generated. The supported types are
+## Template Parameters: `type`
+`type` determines how the project will be generated. The supported types are
 Executable, and Library.
 
 ### Project Types: Executable
