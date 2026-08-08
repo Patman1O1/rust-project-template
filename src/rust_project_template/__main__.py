@@ -6,8 +6,7 @@ import traceback
 import click
 
 # Local Imports
-from project.project import Project
-from project.project_type import ProjectType
+from rust_project_template.project import Project
 
 @click.command('create-project')
 @click.argument('project_name', required=True, type=click.STRING)
@@ -22,7 +21,7 @@ def main(project_name: str,
         # Create a new instance of Project
         project: Project = Project(
             project_name,
-            ProjectType.EXECUTABLE if project_type == 'Executable' else ProjectType.LIBRARY,
+            Project.Type.EXECUTABLE if project_type == 'Executable' else Project.Type.LIBRARY,
             project_author,
             project_description)
 
