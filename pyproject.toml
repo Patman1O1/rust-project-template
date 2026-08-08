@@ -14,5 +14,5 @@ dependencies = [
 ]
 
 [project.scripts]
-create-project = "__main__:main"
+create-project = "rust_project_template/__main__:main"
 
