@@ -7,6 +7,7 @@ import click
 
 # Local Imports
 from rust_project_template.project import Project
+from rust_project_template.project_type import ProjectType
 
 @click.command('create-project')
 @click.argument('project_name', required=True, type=click.STRING)
@@ -21,7 +22,7 @@ def main(project_name: str,
         # Create a new instance of Project
         project: Project = Project(
             project_name,
-            Project.Type.EXECUTABLE if project_type == 'Executable' else Project.Type.LIBRARY,
+            ProjectType.EXECUTABLE if project_type == 'Executable' else ProjectType.LIBRARY,
             project_author,
             project_description)
 
