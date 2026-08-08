@@ -3,21 +3,41 @@ name: "Create Project"
 on:
   workflow_dispatch:
     inputs:
+      language:
+        description: "The language the project will be in."
+        required: true
+        type: choice
+        options:
+          - "C"
+          - "C++"
+
       type:
-        description: "The type of project that will be rendered.
-                      Valid options are Executable and Library"
+        description: "The type of project that will be created."
         required: true
         type: choice
         options:
           - "Executable"
-          - "Library"
+          - "Static Library"
+          - "Shared Library"
+          - "Interface Library"
 
+      namespace:
+        description: "The namespace that will be applied to CMake targets and is the
+                      name of the directory that all header files will be under.
+                      This parameter is optional and will default to the to name
+                      of the GitHub repository if left empty."
+        required: false
+        type: string
+        default: ""
 permissions:
   contents: write
 
+defaults:
+  run:
+    shell: bash
+
 jobs:
   create_project:
-    # Make sure this is not the template repository
     if: github.repository != 'Patman1O1/rust-project-template'
     runs-on: ubuntu-latest
 
@@ -25,26 +45,33 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
       - name: Configure Bot With GitHub
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
 
-      - name: Run create_project.py
-        run: |
-          python3 "${GITHUB_WORKSPACE}/create_project.py" "${{ github.event.repository.name }}" "${{ github.event.inputs.project_type }}"
+      - name: Install Tools
+        run: pip install -e "${GITHUB_WORKSPACE}"
 
-      - name: Update README.md
+      - name: Create Project
         run: |
-          echo -e "# ${{ github.event.repository.name }}\n${{ github.event.repository.description }}" > "$GITHUB_WORKSPACE/README.md"
-
-      - name: Clean up
-        run: |
-          rm -rf "${GITHUB_WORKSPACE}/.github"
-          rm -rf "${GITHUB_WORKSPACE}/create_project.py"
+          create-project                                   \
+            "${{ github.event.repository.name }}"          \
+            "${{ github.event.inputs.type }}"              \
+            "${{ github.actor }}"                          \
+            "${{ github.event.repository.description }}"
 
       - name: Commit changes
         run: |
-          git add .
-          git commit -m "Create ${GITHUB_REPOSITORY}" || echo "No changes to commit"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "::error::create-project produced no changes"
+            exit 1
+          fi
+          git commit -m "Create ${GITHUB_REPOSITORY}"
           git push
